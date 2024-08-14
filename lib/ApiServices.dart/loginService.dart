@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:trio_ai/ApiServices.dart/data.dart';
+import 'package:trio_ai/database/Storage.dart';
 
 class LoginService {
-  Future<bool> login(String username) async {
+  Future<String> login({required String username}) async {
     String LoginApiUrl = data().url + "/login/";
     try {
       final response = await http.post(
@@ -19,19 +20,22 @@ class LoginService {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         print(data["tokens"]["access"]);
-        return true;
+        print(response.statusCode);
+        return data["tokens"]["access"];
       } else {
+        print(jsonDecode(response.body));
+        print(response.statusCode);
         print("different status code ");
 
-        return false;
+        return "";
       }
     } catch (e) {
       print(e);
-      return false;
+      return "";
     }
   }
 
-  Future<bool> Register(String username) async {
+  Future<bool> Register({required String username}) async {
     String RegisterApiUrl = data().url + "/register/";
     print(RegisterApiUrl);
     try {
@@ -48,7 +52,9 @@ class LoginService {
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
         print(response.body);
+
         print(data["tokens"]["access"]);
+        database().putUserId(username);
         return true;
       } else {
         throw Exception('Failed to load response');

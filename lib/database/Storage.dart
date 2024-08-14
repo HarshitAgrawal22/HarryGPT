@@ -8,8 +8,9 @@ class database {
     SessionList = myBox.get("SessionList");
   }
 
-  void LoadUserId() {
+  String LoadUserId() {
     userId = myBox.get("userId");
+    return userId;
   }
 
   void putUserId(userID) {
@@ -18,5 +19,9 @@ class database {
 
   void putSessions() {
     myBox.put("SessionList", SessionList);
+  }
+
+  bool isRegistered() {
+    return myBox.get("userId") == null;
   }
 }

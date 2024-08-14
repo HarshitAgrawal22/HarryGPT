@@ -13,10 +13,12 @@ class bubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.sizeOf(context).width;
     return Container(
+      width: 3 * width / 4,
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(size / 200),
+        borderRadius: BorderRadius.circular(size / 100),
       ),
       padding:
           EdgeInsets.symmetric(vertical: size / 100, horizontal: size / 100),

@@ -1,3 +1,3 @@
 class data {
-  String url = "http://172.16.146.27:8000";
+  String url = "http://172.16.150.250:8000";
 }

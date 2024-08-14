@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class myDrawer extends StatelessWidget {
-  const myDrawer({super.key});
+  List Sessions;
+  myDrawer({super.key, required this.Sessions});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +14,11 @@ class myDrawer extends StatelessWidget {
           ),
           Expanded(
               child: ListView.builder(
-                  itemCount: 9,
+                  itemCount: Sessions.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: GestureDetector(
-                        child: Text("data"),
+                        child: Sessions[index],
                       ),
                     );
                   }))

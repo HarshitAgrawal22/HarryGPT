@@ -3,18 +3,19 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:trio_ai/ApiServices.dart/chat_work_api.dart';
 import 'package:trio_ai/ApiServices.dart/data.dart';
 import 'package:trio_ai/ApiServices.dart/loginService.dart';
+import 'package:trio_ai/database/Storage.dart';
 import 'package:trio_ai/pages/chat_app.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class loginPage extends StatefulWidget {
+  const loginPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<loginPage> createState() => _loginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _loginPageState extends State<loginPage> {
   bool isOkay = true;
 
   String message = "Stretch Down To Get Started";
@@ -26,26 +27,21 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  Future<void> Register(context) async {
+  Future<void> login(context) async {
     try {
-      bool flag = await LoginService().Register(username: IDController.text);
-      if (flag) {
-        int session = await ChatService().CreateSession(
-            username: IDController.text,
-            session_name: SessionNameController.text);
-        print(session);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => chatPage(
-              id: IDController.text,
-              session_id: session,
-            ),
+      int session = await ChatService().CreateSession(
+          username: database().LoadUserId(),
+          session_name: SessionNameController.text);
+      print(session);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => chatPage(
+            id: database().LoadUserId(),
+            session_id: session,
           ),
-        );
-      } else {
-        registerFailure("Register Failure");
-      }
+        ),
+      );
     } catch (e) {
       registerFailure('$e');
     }
@@ -53,7 +49,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   TextEditingController IDController = new TextEditingController(),
       SessionNameController = new TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     Size aspect = MediaQuery.sizeOf(context);
@@ -72,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        "Welcome Master",
+                        "Welcome Back Master",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
@@ -82,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: aspect.height / 20,
                       ),
                       Text(
-                        "They Call It Cheating We Call It Smartwork",
+                        "Got Caught Yet ?",
                         style: TextStyle(color: Colors.blue.shade800),
                       ),
                       SizedBox(
@@ -103,31 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       Radius.circular(aspect.height / 70),
                                     ),
                                     borderSide: BorderSide()),
-                                hintText: "Phone..",
-                                hintStyle: TextStyle(color: Colors.blue)),
-                            controller: IDController,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: aspect.height / 20,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(120),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: aspect.width / 20),
-                          child: TextField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(aspect.height / 70),
-                                    ),
-                                    borderSide: BorderSide()),
-                                hintText: "Chat Session name...",
+                                hintText: "Session Name ... .. .",
                                 hintStyle: TextStyle(color: Colors.blue)),
                             controller: SessionNameController,
                           ),
@@ -137,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: aspect.height / 10,
                       ),
                       GestureDetector(
-                        onTap: () => Register(context),
+                        onTap: () => login(context),
                         child: Container(
                           decoration: BoxDecoration(
                               color: isOkay ? Colors.blue : Colors.red,
@@ -179,6 +150,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               )),
             ),
-            onRefresh: () => Register(context)));
+            onRefresh: () => login(context)));
   }
 }
