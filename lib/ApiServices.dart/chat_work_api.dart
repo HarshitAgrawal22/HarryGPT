@@ -148,17 +148,11 @@ class ChatService {
             "Authorization": "Bearer ${token}"
           },
           body: jsonEncode({"input": input, "chat_session_id": session_id}));
-      if (true) {
-        final data = jsonDecode(response.body);
-        print(data);
 
-        return data["response"];
-      } else {
-        print("different status code ");
-        print(response.statusCode);
+      final data = jsonDecode(response.body);
+      print(data);
 
-        return '';
-      }
+      return data["response"];
     } catch (e) {
       print(e);
       return '';
